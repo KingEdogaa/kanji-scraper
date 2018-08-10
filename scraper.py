@@ -6,19 +6,24 @@ import lxml.html
 
 logger = logging.getLogger(__name__)
 
-def get_my_section(html:str) -> lxml.html.HtmlElement:
+
+def get_my_section(html: str) -> lxml.html.HtmlElement:
     "rip out the section of the etree we want"
     tree = lxml.html.fromstring(html)
     # assuming the first p is good enough?
     return tree.find_class("onkunYomi")[0]
 
-def main() -> None:
+
+def main() -> str:
     "Edgar's cool function"
     req = requests.get("http://www.kanjipedia.jp/kanji/0000384700")
     req.raise_for_status()
     html = req.text
-    #logger.info(html[:500])
-    print(get_my_section(html).text_content())    
+    # logger.info(html[:500])
+    parsed = get_my_section(html).text_content()
+    logger.info(parsed)
+    return parsed
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
